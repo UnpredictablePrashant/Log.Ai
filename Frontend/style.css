@@ -1,0 +1,120 @@
+body {
+    background-image: url("images/devops-services.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace !important;
+    color: #fff; /* Change text color to white */
+  }
+  
+  .navigation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 200px; /* Adjust the width as needed */
+    background-color: #202637;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    
+  }
+  
+  .navigation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .navigation li {
+    margin-bottom: 10px;
+  }
+  
+  .navigation a {
+    color: #8193b2;
+    text-decoration: none;
+    display: block; /* Make the entire list item clickable */
+    padding: 5px 10px;
+    transition: border-color 0.3s; /* Add a smooth transition effect for hover */
+  }
+  
+  .navigation a:hover {
+    border-color: #00ebd4; /* Change the border color on hover */
+    color: #00ebd4;
+  }
+  
+  .container {
+    margin-left: 220px; /* Adjust the margin to create space for the navigation bar */
+    padding: 20px;
+    background-color: transparent;
+    border: 1px solid #202637;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-align: left;
+    color: #8193b2 !important;
+  }
+  
+  h1,
+  h3,
+  h4 {
+    font-family: 'Share Tech';
+    font-weight: 900;
+    font-size: 24px;
+    color: #00ebd4;
+    animation: pulse 0.9s infinite;
+    margin: 10px 0;
+  }
+  
+  .inline {
+    display: inline;
+    margin-left: 10px;
+  }
+  
+  @keyframes pulse {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .cursor:after {
+    content: "_";
+    opacity: 0;
+    animation: cursor 1s infinite;
+  }
+  
+  .sign:before {
+    content: "> ";
+  }
+  
+  @keyframes cursor {
+    0% {
+      opacity: 0;
+    }
+    40% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+  .sub-item {
+    margin-left: 40px;
+  }
+  

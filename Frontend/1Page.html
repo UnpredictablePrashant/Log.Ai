@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Configuration</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        background-image: url("/images/devops-services.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      .form-container {
+        width: 50%;
+        background-color: transparent; /* rgba(255, 255, 255, 0.8); */
+        padding: 20px;
+        border-radius: 10px;
+        text-align: left;
+      }
+
+      form {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navigation">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="1Page.html">Configuration</a></li>
+      </ul>
+    </div>
+
+    <div class="form-container">
+      <h1>Configuration</h1>
+      <!-- <form id="gitForm"> -->
+        <label for="gitUrl">Git URL:</label>
+        <input type="text" id="gitUrl" name="gitUrl" /><br /><br />
+        <input type="button" value="Submit" onclick="submitGitUrl()" />
+        <!-- <input type="submit" value="Submit" /> -->
+      <!-- </form> -->
+      <p id="message1"></p>
+      <button id="nextButton" style="display: none" onclick="nextPage(2)">
+        Next
+      </button>
+    </div>
+
+    <script>
+      function nextPage(pageNumber) {
+        window.location.href = pageNumber + "Page.html";
+      }
+
+    //   document
+    //     .getElementById("gitForm")
+    //     .addEventListener("submit", async function (e) {
+    //       e.preventDefault();
+
+    //       const url = document.getElementById("gitUrl").value;
+    //       await handler(url);
+    //     });
+
+      async function submitGitUrl() {
+        const url = document.getElementById("gitUrl").value;
+        const exists = await fetch(
+          "https://hellowork-mhlw.vercel.app/api/github?url=" + url
+        ).then((r) => r.json())
+        const messageElement = document.getElementById("message1");
+        const nextButton = document.getElementById("nextButton");
+
+        if (exists) {
+          messageElement.innerText = "Valid Github URL";
+          messageElement.style.color = "green";
+          nextButton.style.display = "block";
+        } else {
+          messageElement.innerText = "InValid Github URL";
+          messageElement.style.color = "red";
+          nextButton.style.display = "none";
+        }
+      }
+
+      //   document
+      //     .getElementById("gitForm")
+      //     .addEventListener("submit", function (event) {
+      //       event.preventDefault();
+
+      //       const gitUrl = document.getElementById("gitUrl").value;
+
+      //       const checkExists = new Promise((resolve, reject) => {
+      //   fetch('https://hellowork-mhlw.vercel.app/api/github?url=' + gitUrl)
+      //     .then(response => {
+      //       if (response.ok) {
+      //         return response.json();
+      //       } else {
+      //         throw new Error('Network response was not ok');
+      //       }
+      //     })
+      //     .then(data => {
+      //       const exists = data;
+      //       resolve(data);
+      //     })
+      //     .catch(error => {
+      //       reject(error);
+      //     });
+      // });
+
+      // checkExists.then(exists => {
+      //   const messageElement = document.getElementById('message1');
+
+      //   if (exists) {
+      //     messageElement.innerText = 'Success message here';
+      //     messageElement.style.color = 'green';
+      //     document.getElementById('nextButton').style.display = 'block';
+      //   } else {
+      //     messageElement.innerText = 'Error message here';
+      //     messageElement.style.color = 'red';
+      //     document.getElementById('nextButton').style.display = 'none';
+      //   }
+      // }).catch(error => {
+      //   console.error('There was a problem with the fetch operation:', error);
+      // });
+      //   const messageElement = document.getElementById("message1");
+      //   if (apiResponse.success) {
+      //     messageElement.innerText = "Success message here";
+      //     messageElement.style.color = "green";
+      //     document.getElementById("nextButton").style.display = "block";
+      //   } else {
+      //     messageElement.innerText = "Error message here";
+      //     messageElement.style.color = "red";
+      //     document.getElementById("nextButton").style.display = "none";
+      //   }
+      // });
+    </script>
+  </body>
+</html>

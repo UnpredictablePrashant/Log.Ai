@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Stack</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        background-image: url("/images/devops-services.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      .form-container {
+        width: 50%;
+        background-color: transparent; /* rgba(255, 255, 255, 0.8); */
+        padding: 20px;
+        border-radius: 10px;
+        text-align: left;
+      }
+
+      form {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navigation">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="1Page.html">Configuration</a></li>
+        <li><a href="2Page.html">Stack</a></li>
+      </ul>
+    </div>
+    <div class="form-container">
+      <h1>Stack</h1>
+
+      <form action="submit_stack" method="post">
+        <label for="stack">Select Stack:</label>
+        <select id="stack" name="stack">
+          <option value="MERN">MERN</option>
+          <option value="Python">Python</option></select
+        ><br /><br />
+        <input type="submit" value="Submit" />
+      </form>
+      <p>Message: <span id="message2"></span></p>
+      <button onclick="nextPage(3)">Next</button>
+    </div>
+  </body>
+</html>
+<script>
+  function nextPage(pageNumber) {
+    window.location.href = pageNumber + "Page.html";
+  }
+</script>
