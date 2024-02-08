@@ -95,4 +95,8 @@ Administration--> Configuration-->Webhooks
 ![image](https://github.com/UnpredictablePrashant/Log.Ai/assets/60352729/9946104b-ecce-41df-a95d-41c0d5e91219)
 
 
+![image](https://github.com/UnpredictablePrashant/Log.Ai/assets/60352729/0e6373fd-3c9d-482f-9b17-bf3a2923886e)
+
+
+
 
