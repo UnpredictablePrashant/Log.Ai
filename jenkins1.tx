@@ -1,0 +1,36 @@
+#sonarqube analysis
+
+pipeline {
+    agent any
+
+    environment {
+        // Your environment variables
+        SCANNER_HOME=tool 'sonar-scanner'
+        // Add other environment variables if needed
+    }
+
+    stages {
+        // Previous stages (Checkout, SonarQube Analysis, etc.)
+
+        // Additional stage to fetch the report using curl and save it to a text file
+        stage('Fetch SonarQube Report') {
+            steps {
+                script {
+                    def curlOutput = sh (
+                        script: "curl -s http://192.168.100.95:9000/dashboard?id=TravelMemory",
+                        returnStdout: true
+                    ).trim()
+
+                    writeFile file: 'sonarqube_report.txt', text: curlOutput
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Archive artifacts (if needed)
+            archiveArtifacts 'sonarqube_report.txt'
+        }
+    }
+}
