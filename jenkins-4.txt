@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+    
+    environment {
+        SCANNER_HOME=tool 'sonar-scanner'
+    }
+
+    parameters {
+        string(name: 'GITHUB_URL', defaultValue: '', description: 'Enter GitHub URL')
+        string(name: 'SONARQUBE_REPORT_URL', defaultValue: '', description: 'SonarQube Analysis Report URL')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    // Checkout the repository using provided GitHub URL
+                    if (params.GITHUB_URL) {
+                        checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: params.GITHUB_URL]]])
+                    } else {
+                        error("Git repository URL is empty or not provided")
+                    }
+                }
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    withSonarQubeEnv('sonar-server') {
+                        def scannerOutput = sh returnStdout: true, script: "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=TravelMemory -Dsonar.projectKey=TravelMemory"
+                        
+                        // Parse the SonarQube scanner output to extract the analysis report URL
+                        def reportUrl = extractSonarQubeReportUrl(scannerOutput)
+                        
+                        // Display the analysis report URL to the user
+                        echo "SonarQube Analysis Report: ${reportUrl}"
+
+                        // Pass the report URL as an output parameter
+                        env.SONARQUBE_REPORT_URL = reportUrl
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Function to extract SonarQube report URL from scanner output
+def extractSonarQubeReportUrl(scannerOutput) {
+    def matcher = scannerOutput =~ /INFO: ANALYSIS SUCCESSFUL, you can find the results at: (.+)/
+    if (matcher) {
+        return matcher[0][1]
+    } else {
+        return "Unable to retrieve report URL"
+    }
+}
