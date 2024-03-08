@@ -2,11 +2,26 @@
 <html>
 <head>
     <title>Success</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Fetch SonarQube report URL from backend
+            $.get('/sonarqube_report_url', function(data) {
+                var sonarqubeReportUrl = data.sonarqube_report_url;
+                if (sonarqubeReportUrl) {
+                    // Display SonarQube report URL
+                    $('#sonarqube_report_url').html('<a href="' + sonarqubeReportUrl + '" target="_blank">' + sonarqubeReportUrl + '</a>');
+                } else {
+                    $('#sonarqube_report_url').html('SonarQube Analysis Report URL not available');
+                }
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>Jenkins Pipeline Triggered Successfully</h1>
     <p>GitHub URL: {{ github_url }}</p>
-    <p>SonarQube Analysis Report URL: <a href="{{ sonarqube_report_url }}" target="_blank">{{ sonarqube_report_url }}</a></p>
+    <p>SonarQube Analysis Report URL: <span id="sonarqube_report_url"></span></p>
     <!-- You can provide a link or instructions for further actions -->
 </body>
 </html>
