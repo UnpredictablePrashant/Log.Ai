@@ -2,13 +2,26 @@
 <html>
 <head>
     <title>GitHub URL Input</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Submit form and handle response
+            $('form').submit(function(event) {
+                event.preventDefault(); // Prevent default form submission
+                var githubUrl = $('input[name="github_url"]').val(); // Get GitHub URL
+                $.post('/', { github_url: githubUrl }, function(data) {
+                    // Redirect to success page
+                    window.location.href = '/success';
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>Enter GitHub URL</h1>
-    <form method="POST">
+    <form>
         <input type="text" name="github_url" placeholder="Enter GitHub URL">
         <input type="submit" value="Submit">
-
     </form>
 </body>
 </html>
