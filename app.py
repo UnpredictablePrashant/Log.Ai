@@ -1,26 +1,66 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request,jsonify
 import requests
 import re
 import time
+import json
+
 
 app = Flask(__name__)
 
-JENKINS_URL = 'http://192.168.100.95:8080'
-JENKINS_JOB = 'test4'
+JENKINS_URL = 'http://192.168.0.105:8080'
+JENKINS_JOB = 'test'
 
 # Jenkins API credentials
 JENKINS_USERNAME = 'admin'
-JENKINS_API_TOKEN = '11b670728ca3486374c851b0203e661ffb'
+JENKINS_API_TOKEN = '11eb6ad305f810440698eaa7f1b1b58706'
+
+
+# @app.route('/')
+# def index():
+#     return render_template('index.html')
+
+@app.route('/1Page',methods=['GET', 'POST'])
+def page1():
+    if request.method == 'POST':
+        data = request.json
+        github_url = data.get('github_url')
+        result,sonarqube_report_url = trigger_jenkins_pipeline(github_url)
+        if result == "SUCCESS":
+           return jsonify({'github_url': github_url, 'sonarqube_report_url': sonarqube_report_url}), 200
+        else:
+            return jsonify({'error': 'Failed to trigger Jenkins pipeline'}), 400
+    return render_template('1Page.html')
+
+
+@app.route('/2Page',methods=['GET', 'POST'])
+def page2():
+    if request.method == 'POST':
+        data = request.json
+        github_url = data.get('github_url')
+        stack = data.get('stack')
+        port = data.get('port')
+        result = "SUCCESS"
+        if result == "SUCCESS":
+           return jsonify({'github_url': github_url}), 200
+        else:
+            return jsonify({'error': 'Failed to trigger Jenkins pipeline'}), 400
+    return render_template('2Page.html')
+
+
+@app.route('/3Page',methods=['GET', 'POST'])
+def page3():
+    if request.method == 'POST':
+        data = request.json
+        github_url = data.get('github_url')
+        result,sonarqube_report_url = trigger_jenkins_pipeline(github_url)
+        if result == "SUCCESS":
+           return jsonify({'github_url': github_url, 'sonarqube_report_url': sonarqube_report_url}), 200
+        else:
+            return jsonify({'error': 'Failed to trigger Jenkins pipeline'}), 400
+    return render_template('3Page.html')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == 'POST':
-        github_url = request.form['github_url']
-        sonarqube_report_url = trigger_jenkins_pipeline(github_url)
-        if sonarqube_report_url:
-            return render_template('success.html', github_url=github_url, sonarqube_report_url=sonarqube_report_url)
-        else:
-            return render_template('failure.html')
         # trigger_jenkins_pipeline(github_url)
         # return render_template('success.html', github_url=github_url)
 
@@ -32,13 +72,57 @@ def trigger_jenkins_pipeline(github_url):
     auth = (JENKINS_USERNAME, JENKINS_API_TOKEN)
     params = {'GITHUB_URL': github_url}  # Pass the GitHub URL as a parameter to Jenkins
     response = requests.post(job_url, auth=auth, params=params)
+    if response.content:
+        json_response = response.json()
+        print("Response Content:", json_response)
 
     if response.status_code == 201:
         print("Jenkins job triggered successfully!")
+        queue_item_url = response.headers['Location']
+        return wait_for_pipeline_completion(queue_item_url)
+        
     else:
         print("Failed to trigger Jenkins job")
         return None
 
+
+def wait_for_pipeline_completion(queue_item_url):
+    auth = (JENKINS_USERNAME, JENKINS_API_TOKEN)
+    while True:
+        try:
+            queue_response = requests.get(queue_item_url + "/api/json", auth=auth)
+            queue_response.raise_for_status()  # Check for HTTP errors
+            
+            queue_status = queue_response.json()
+            if 'executable' in queue_status and queue_status['executable'] is not None:
+                    build_url = queue_status['executable']['url']
+                    build_response = requests.get(build_url + "/api/json", auth=auth)
+                    build_response.raise_for_status()  # Check for HTTP errors
+                    
+                    build_status = build_response.json()
+                    if build_status['result'] is not None:
+                        print(f"Pipeline completed with result: {build_status['result']}")
+                        
+                        sonarqube_report_url = None
+                        actions = build_status.get('actions', [])
+                        for action in actions:
+                            if 'hudson.plugins.sonar.action.SonarBuildBadgeAction' in action.get('_class', ''):
+                                sonarqube_report_url = action.get('url', '')
+                                break
+
+                        return build_status['result'],sonarqube_report_url
+                    elif build_status['building']:
+                        print("Pipeline is still running...")
+                    else:
+                        print("Pipeline stopped unexpectedly.")
+                        return None
+            else:
+               print("Queue item not yet executable. Waiting...")
+        except requests.exceptions.RequestException as e:
+            print(f"An error occurred: {e}")
+        
+        # Wait for 10 seconds before checking again
+        time.sleep(10)
 # def get_sonarqube_report_url():
 #     # Parse Jenkins console output to extract SonarQube report URL
 #     # You may need to adjust the regular expression based on the actual output format
@@ -82,4 +166,4 @@ def get_sonarqube_report_url():
     return None
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=5001)

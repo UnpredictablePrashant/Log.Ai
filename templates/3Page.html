@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Deployment</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        background-image: url("/images/devops-services.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      .form-container {
+        width: 50%;
+        background-color: transparent; /* rgba(255, 255, 255, 0.8); */
+        padding: 20px;
+        border-radius: 10px;
+        text-align: left;
+      }
+
+      form {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navigation">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="1Page.html">Configuration</a></li>
+        <li><a href="2Page.html">Stack</a></li>
+        <li><a href="3Page.html">Deployment</a></li>
+      </ul>
+    </div>
+    <div class="form-container">
+      <h1>Deployment</h1>
+      <form action="submit_deployment" method="post">
+        <label for="deployment">Select Deployment Type:</label>
+        <select id="deployment" name="deployment">
+          <option value="Normal">Normal</option>
+          <option value="EKS">EKS</option></select
+        ><br /><br />
+        <!-- <input type="checkbox" id="toggle" name="toggle" />
+        <label for="toggle">Toggle</label><br /><br /> -->
+        <!-- <input
+          type="text"
+          id="details"
+          name="details"
+          placeholder="Details"
+        /><br /><br />
+        <input type="submit" value="Submit" /> -->
+      </form>
+    </div>
+    <p>Message: <span id="message3"></span></p>
+  </body>
+</html>
