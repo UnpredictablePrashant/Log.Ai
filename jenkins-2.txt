@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+    
+    parameters {
+        string(name: 'GITHUB_URL', description: 'GitHub URL of the project')
+        string(name: 'PORT', description: 'Port number to expose')
+        string(name: 'NAME_OF_DEPLOYMENT', description: 'name to use for docker image' )
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                script {
+                    git branch: 'main', url: "${params.GITHUB_URL}"
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    dir('project_directory') {
+                        // sh 'cp -r ../. . '
+                        sh 'rsync -av --exclude=".git" ../ .'
+                        writeFile file: 'Dockerfile', text: """
+                            FROM python:3.9
+                            WORKDIR /app
+                            COPY requirements.txt .
+                            RUN pip install --no-cache-dir -r requirements.txt
+                            COPY . .
+                            EXPOSE ${params.PORT}
+                            CMD ["python", "app.py"]
+                        """
+                        sh "docker build -t ${params.NAME_OF_DEPLOYMENT} ."
+                    }
+                }
+            }
+        }
+    }
+}
