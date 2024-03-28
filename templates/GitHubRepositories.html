@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitHub Repositories</title>
+  </head>
+  <body>
+    <h1>Your GitHub Repositories</h1>
+    <form action="#">
+      <label for="repos">Choose a repository:</label>
+      <select id="repos" name="repos">
+        {% for repo in repositories %}
+        <option value="{{ repo.full_name }}">{{ repo.full_name }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Go to Repository</button>
+    </form>
+  </body>
+</html>

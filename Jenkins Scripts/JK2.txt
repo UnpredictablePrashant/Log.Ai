@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+    
+    parameters {
+        string(name: 'GITHUB_URL', description: 'GitHub URL of the project')
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Enter the branch name to checkout')
+        string(name: 'PORT', description: 'Port number to expose')
+        string(name: 'PROJECT_NAME', description: 'name to use for docker image' )
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                script {
+                    git branch: "${params.BRANCH_NAME}", url: "${params.GITHUB_URL}"
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    dir('project_directory') {
+                        // sh 'cp -r ../. . '
+                        sh 'rsync -av --exclude=".git" ../ .'
+                        writeFile file: 'Dockerfile', text: """
+                            FROM python:3.9-slim
+                            WORKDIR /app
+                            COPY . .
+                            RUN pip install --no-cache-dir -r requirements.txt
+                            EXPOSE ${params.PORT}
+                            CMD ["python", "app.py"]
+                        """
+                        def projectNameLower = params.PROJECT_NAME.toLowerCase() // Convert to lowercase
+                        sh "sudo docker build -t ${projectNameLower} ."
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'PORT', defaultValue: '8080', description: 'Port number to expose')
+        string(name: 'PROJECT_NAME', defaultValue: 'my_project', description: 'Name of the Docker project')
+    }
+
+    stages {
+        stage('Build and Run Docker Container') {
+            steps {
+                script {
+                    def projectNameLower = params.PROJECT_NAME.toLowerCase()
+                    def dockerCommand = "sudo docker run -it -d -p ${params.PORT}:${params.PORT} ${projectNameLower}"
+                    sh dockerCommand
+                }
+            }
+        }
+    }
+}

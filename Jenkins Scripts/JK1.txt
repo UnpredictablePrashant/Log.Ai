@@ -1,0 +1,67 @@
+pipeline {
+    agent any
+    
+    environment {
+        SCANNER_HOME=tool 'sonar-scanner'
+    }
+
+    parameters {
+        string(name: 'GITHUB_URL', defaultValue: '', description: 'Enter GitHub URL')
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Enter the branch name to checkout')
+        string(name: 'PROJECT_NAME', defaultValue: 'Default', description: 'Enter the project name for SonarQube analysis')
+        string(name: 'SONARQUBE_REPORT_URL', defaultValue: '', description: 'SonarQube Analysis Report URL')
+    }
+
+    stages {
+        stage('Check Java Version') {
+            steps {
+                sh 'java -version'
+            }
+        }
+        stage('Checkout') {
+            steps {
+                script {
+                    // Checkout the repository using provided GitHub URL
+                    if (params.GITHUB_URL) {
+                        checkout([$class: 'GitSCM', branches: [[name: params.BRANCH_NAME]], userRemoteConfigs: [[url: params.GITHUB_URL]]])
+                    } else {
+                        error("Git repository URL is empty or not provided")
+                    }
+                }
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    withSonarQubeEnv('sonar-server') {
+                        def scannerOutput = sh(script: "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=${params.PROJECT_NAME} -Dsonar.projectKey=${params.PROJECT_NAME}", returnStdout: true)
+                        
+                        // Parse the SonarQube scanner output to extract the analysis report URL
+                        def reportUrl = extractSonarQubeReportUrl(scannerOutput)
+                        
+                        // Display the analysis report URL to the user
+                        echo "SonarQube Analysis Report: ${reportUrl}"
+
+                        // Pass the report URL as an output parameter
+                        env.SONARQUBE_REPORT_URL = reportUrl
+                        
+                        echo "SonarQube Scanner Output:"
+                        echo "${scannerOutput}"
+                        writeFile file: "${params.PROJECT_NAME}_${getTimeStamp()}.txt", text: scannerOutput
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Function to extract SonarQube report URL from scanner output
+def extractSonarQubeReportUrl(scannerOutput) {
+    def matcher = scannerOutput =~ /INFO: ANALYSIS SUCCESSFUL, you can find the results at: (.+)/
+    return matcher ? matcher[0][1] : "Unable to retrieve report URL"
+}
+
+// Function to get timestamp in yyyy-MM-dd_HH-mm-ss format
+def getTimeStamp() {
+    return new Date().format("yyyy-MM-dd_HH-mm-ss")
+}

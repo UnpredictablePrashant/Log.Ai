@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login with GitHub</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f4f4f4;
+      }
+      .container {
+        text-align: center;
+      }
+      h1 {
+        margin-bottom: 20px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #24292e;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+      }
+      button img {
+        margin-right: 10px;
+        width: 20px; /* Adjust the size as needed */
+        height: 20px;
+      }
+      button:hover {
+        background-color: #0366d6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navigation">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="login">Login</a></li>
+        <!-- <li><a href="1Page">Configuration</a></li> -->
+      </ul>
+    </div>
+    <div class="container">
+      <h1>Login with GitHub</h1>
+      <button onclick="redirectToGitHub()">
+        <img
+          src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+          alt="GitHub Logo"
+        />
+        Login with GitHub
+      </button>
+    </div>
+
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+      <div
+        id="toasterSuccess"
+        class="toast align-items-center text-white bg-success border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="d-flex">
+          <div class="toast-body">Success message here!</div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
+        </div>
+      </div>
+      <div
+        id="toasterFail"
+        class="toast align-items-center text-white bg-danger border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+      >
+        <div class="d-flex">
+          <div class="toast-body">Error message here!</div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../static/login.js"></script>
+    <!-- <script>
+      async function showToast(message, toasterId) {
+        var toasterElement = document.getElementById(toasterId);
+        toasterElement.querySelector(".toast-body").textContent = message;
+        var toaster = new bootstrap.Toast(toasterElement);
+        toaster.show();
+        setTimeout(function () {
+          toaster.hide();
+        }, 5000);
+      }
+
+      async function redirectToGitHub() {
+        try {
+          const response = await fetch("/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          if (!response.ok) {
+            document.getElementById("loader").style.display = "none";
+            await showToast("Error: Faild to Login", "toasterFail");
+          } else {
+            const data = await response.json();
+            window.location.href = data.Data;
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          await showToast("Error: " + error.message, "toasterFail");
+        } finally {
+          document.getElementById("loader").style.display = "none";
+        }
+      }
+
+      //   function redirectToGitHub() {
+      //     // Replace 'your_client_id' with your GitHub OAuth application's client ID
+      //     var client_id = "e16b5017df4785ba0140";
+      //     // Replace 'http://localhost:5000/callback' with your actual callback URL
+      //     var redirect_uri = "http://127.0.0.1:5001/callback";
+      //     var github_auth_url = "https://github.com/login/oauth/authorize";
+      //     var params =
+      //       "client_id=" +
+      //       encodeURIComponent(client_id) +
+      //       "&redirect_uri=" +
+      //       encodeURIComponent(redirect_uri) +
+      //       "&scope=user";
+      //     var auth_url = github_auth_url + "?" + params;
+      //     window.location.href = auth_url;
+      //   }
+    </script> -->
+  </body>
+</html>
