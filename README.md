@@ -98,5 +98,10 @@ Administration--> Configuration-->Webhooks
 ![image](https://github.com/UnpredictablePrashant/Log.Ai/assets/60352729/0e6373fd-3c9d-482f-9b17-bf3a2923886e)
 
 
+To build docker inside the jenkins it will ask for root previdledges
 
-
+```
+sudo visudo
+jenkins ALL=(ALL) NOPASSWD: ALL
+service jenkins start
+```
