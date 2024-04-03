@@ -1,5 +1,6 @@
 body {
   background-image: url("images/devops-services.jpg");
+  background-color: #333; /* Dark background for contrast */
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -8,9 +9,23 @@ body {
   justify-content: center;
   height: 100vh;
   margin: 0;
-  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace !important;
-  color: #fff; /* Change text color to white */
+  font-family: 'Arial', sans-serif; /* Clear and readable font */
+  color: #FFFFFF; /* White color for text */
 }
+
+.container::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7); /* Dark overlay with transparency */
+  z-index: -1; /* Behind the content */
+}
+
+
 
 .navigation {
   position: fixed;
@@ -48,14 +63,15 @@ body {
 }
 
 .container {
-  margin-left: 220px; /* Adjust the margin to create space for the navigation bar */
+  position: relative; /* Required for ::before to work correctly */
+  margin-left: 220px;
   padding: 20px;
-  background-color: transparent;
-  border: 1px solid #202637;
+  background-color: transparent; /* Transparent so the overlay shows through */
+  color: #FFFFFF;
   border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   text-align: left;
-  color: #8193b2 !important;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  overflow: hidden; /* Hide overflow from the pseudo-element */
 }
 
 h1,
@@ -125,7 +141,21 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f0f0f0;
+  /* background-color: #f0f0f0; */
+  background-color: gray;
+}
+
+.loader-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+  z-index: 10;
 }
 
 .loader {
@@ -134,9 +164,17 @@ body {
   border-top: 5px solid #3498db;
   width: 50px;
   height: 50px;
-  -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;
 }
+
+.loading-message {
+  color: #fff;
+  text-align: center;
+  font-size: 1.5rem;
+  position: absolute;
+  top: calc(50% + 25px); /* Position the message below the loader */
+}
+
 
 /* Safari */
 @-webkit-keyframes spin {

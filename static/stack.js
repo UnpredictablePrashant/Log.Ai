@@ -13,6 +13,7 @@ async function showToast(message, toasterId) {
 }
 
 async function apicall() {
+  const loader = (document.getElementById("loader-wrapper").style.display = "");
   const githubUrl = localStorage.getItem("githubUrl");
   const repoName = localStorage.getItem("repoName");
   const repoCloneUrl = localStorage.getItem("repoCloneUrl");
@@ -37,8 +38,8 @@ async function apicall() {
     });
 
     if (!response.ok) {
-      document.getElementById("loader").style.display = "none";
-      await showToast("Error: Invalid Github URL", "toasterFail");
+      document.getElementById("loader-wrapper").style.display = "none";
+      await showToast("Error: Build Failed ", "toasterFail");
     } else {
       const data = await response.json();
       localStorage.setItem("port", port);
@@ -47,13 +48,15 @@ async function apicall() {
       //   "<a href='" + data.github_url + "'>Jenkins Report</a>";
       const nextButton = document.getElementById("nextButton");
       nextButton.style.display = "block";
-      await showToast("Success: Valid Github URL", "toasterSuccess");
+      document.getElementById("loader-wrapper").style.display = "none";
+      await showToast("Success: Build", "toasterSuccess");
     }
   } catch (error) {
     console.error("Error:", error);
     await showToast("Error: " + error.message, "toasterFail");
   } finally {
-    document.getElementById("loader").style.display = "none";
+    document.getElementById("loader-wrapper").style.display = "none";
+    //document.getElementById("loader-wrapper").style.display = "none";
   }
 }
 
@@ -79,7 +82,7 @@ async function getRepoDetails() {
     });
 
     if (!response.ok) {
-      document.getElementById("loader").style.display = "none";
+      document.getElementById("loader-wrapper").style.display = "none";
       await showToast("Error: Invalid Github URL", "toasterFail");
     } else {
       const data = await response.json();
@@ -90,7 +93,7 @@ async function getRepoDetails() {
     console.error("Error:", error);
     await showToast("Error: " + error.message, "toasterFail");
   } finally {
-    document.getElementById("loader").style.display = "none";
+    document.getElementById("loader-wrapper").style.display = "none";
   }
 }
 
@@ -112,7 +115,7 @@ async function fetchFolderContents(folderPath) {
     });
 
     if (!response.ok) {
-      document.getElementById("loader").style.display = "none";
+      document.getElementById("loader-wrapper").style.display = "none";
       await showToast("Error: Invalid Github URL", "toasterFail");
     } else {
       const data = await response.json();
@@ -123,7 +126,7 @@ async function fetchFolderContents(folderPath) {
     console.error("Error:", error);
     await showToast("Error: " + error.message, "toasterFail");
   } finally {
-    document.getElementById("loader").style.display = "none";
+    document.getElementById("loader-wrapper").style.display = "none";
   }
 }
 

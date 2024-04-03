@@ -7,7 +7,7 @@ function setGitUrl(url) {
 }
 
 async function submitGitUrl() {
-  const loader = (document.getElementById("loader").style.display = "block");
+  const loader = (document.getElementById("loader-wrapper").style.display = "");
   try {
     debugger;
     const repoName = document.getElementById("repoName").innerText; // Get repo name from inner text
@@ -34,10 +34,9 @@ async function submitGitUrl() {
     }
   } catch (error) {
     console.error("An error occurred during fetch:", error);
-    loader.style.display = "none";
     await showToast("Error: Invalid Github URL", "toasterFail");
   } finally {
-    loader.style.display = "none";
+    document.getElementById("loader-wrapper").style.display = "none";
   }
 }
 
@@ -65,7 +64,7 @@ async function apicall(githubUrl, branch_name, repo_name) {
       }),
     });
     if (!response.ok) {
-      document.getElementById("loader").style.display = "none";
+      document.getElementById("loader-wrapper").style.display = "none";
       await showToast("Error: Invalid Github URL", "toasterFail");
     } else {
       const data = await response.json();
@@ -93,7 +92,7 @@ async function apicall(githubUrl, branch_name, repo_name) {
     console.error("Error:", error);
     await showToast("Error: " + error.message, "toasterFail");
   } finally {
-    document.getElementById("loader").style.display = "none";
+    document.getElementById("loader-wrapper").style.display = "none";
   }
 }
 
@@ -106,7 +105,7 @@ async function fetchGitUrls(githubUrl) {
       },
     });
     if (!response.ok) {
-      document.getElementById("loader").style.display = "none";
+      document.getElementById("loader-wrapper").style.display = "none";
       await showToast("Error: Invalid Github URL", "toasterFail");
     } else {
       debugger;
@@ -117,7 +116,7 @@ async function fetchGitUrls(githubUrl) {
     console.error("Error:", error);
     await showToast("Error: " + error.message, "toasterFail");
   } finally {
-    document.getElementById("loader").style.display = "none";
+    document.getElementById("loader-wrapper").style.display = "none";
   }
 }
 
@@ -211,7 +210,7 @@ async function fetchGitRepoDetails(githubUrl) {
       },
     });
     if (!response.ok) {
-      document.getElementById("loader").style.display = "none";
+      document.getElementById("loader-wrapper").style.display = "none";
       await showToast("Error: Invalid Github URL", "toasterFail");
     } else {
       debugger;
@@ -222,7 +221,7 @@ async function fetchGitRepoDetails(githubUrl) {
     console.error("Error:", error);
     await showToast("Error: " + error.message, "toasterFail");
   } finally {
-    document.getElementById("loader").style.display = "none";
+    document.getElementById("loader-wrapper").style.display = "none";
   }
 }
 

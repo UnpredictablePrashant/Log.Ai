@@ -14,7 +14,7 @@
     />
     <style>
       body {
-        background-image: url("/static/images/devops-services.jpg");
+        /* background-image: url("/static/images/devops-services.jpg"); */
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
@@ -47,19 +47,25 @@
         <li><a href="deployment">Deployment</a></li>
       </ul>
     </div>
-    <div class="form-container">
-      <h1>Deployment</h1>
-      <label for="deployment">Select Deployment Type:</label>
-      <select id="deployment" name="deployment">
-        <option value="Normal">Normal</option>
-        <option value="EKS">EKS</option></select
-      ><br /><br />
-      <div id="selectedDetails" style="display: none">
-        <h2>Selected Deployment Details</h2>
-        <p><strong>Name:</strong> <span id="repoName"></span></p>
-        <p><strong>Price:</strong> <span id="price"></span></p>
+    <div class="container">
+      <div class="form-container">
+        <div id="loader-wrapper" class="loader-wrapper" style="display: none">
+          <div class="loader"></div>
+          <div class="loading-message">Please wait...</div>
+        </div>
+        <h1>Deployment</h1>
+        <label for="deployment">Select Deployment Type:</label>
+        <select id="deployment" name="deployment">
+          <option value="Normal">Normal</option>
+          <option value="EKS">EKS</option></select
+        ><br /><br />
+        <div id="selectedDetails" style="display: none">
+          <h2>Selected Deployment Details</h2>
+          <p><strong>Name:</strong> <span id="repoName"></span></p>
+          <p><strong>Price:</strong> <span id="price"></span></p>
+        </div>
+        <input type="submit" value="Submit" onclick="apicall()" />
       </div>
-      <input type="submit" value="Submit" onclick="apicall()" />
     </div>
     <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
       <div

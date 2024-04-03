@@ -17,6 +17,7 @@ async function showToast(message, toasterId) {
 }
 
 async function apicall() {
+  const loader = (document.getElementById("loader-wrapper").style.display = "");
   const repoName = localStorage.getItem("repoName");
   const port = localStorage.getItem("port");
   try {
@@ -32,22 +33,23 @@ async function apicall() {
     });
 
     if (!response.ok) {
-      document.getElementById("loader").style.display = "none";
-      await showToast("Error: Invalid Github URL", "toasterFail");
+      document.getElementById("loader-wrapper").style.display = "none";
+      await showToast("Error: Deployment Failed", "toasterFail");
     } else {
-      const data = await response.json();
-      localStorage.setItem("port", port);
-      localStorage.setItem("stack", stack);
+      // const data = await response.json();
+      // localStorage.setItem("port", port);
+      // localStorage.setItem("stack", stack);
       // document.getElementById("message2").innerHTML =
       //   "<a href='" + data.github_url + "'>Jenkins Report</a>";
-      const nextButton = document.getElementById("nextButton");
-      nextButton.style.display = "block";
-      await showToast("Success: Valid Github URL", "toasterSuccess");
+      // const nextButton = document.getElementById("nextButton");
+      // nextButton.style.display = "block";
+      document.getElementById("loader-wrapper").style.display = "none";
+      await showToast("Success: Deployed", "toasterSuccess");
     }
   } catch (error) {
     console.error("Error:", error);
     await showToast("Error: " + error.message, "toasterFail");
   } finally {
-    document.getElementById("loader").style.display = "none";
+    document.getElementById("loader-wrapper").style.display = "none";
   }
 }

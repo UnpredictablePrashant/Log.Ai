@@ -1,5 +1,5 @@
 {
-    "JENKINS_URL": "http://192.168.0.104:8080",
+    "JENKINS_URL": "http://192.168.0.103:8080",
     "JENKINS_JOB": "test",
     "JENKINS_JOB2": "test2",
     "JENKINS_JOB3": "test3",
@@ -8,6 +8,8 @@
     "CLIENT_ID": "e16b5017df4785ba0140",
     "CLIENT_SECRET": "4ed44367b9ae07128e0f834d8768d2c2d5ed18e1",
     "MONGODB":"mongodb://localhost:27017/autodeploy",
-    "REDIRECT_URI":"http://127.0.0.1:5001/callback"
+    "REDIRECT_URI":"http://127.0.0.1:5001/callback",
+    "AWS_ACCESS_KEY_ID":"",
+    "AWS_SECRET_ACCESS_KEY":""
   }
   

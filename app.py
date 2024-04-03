@@ -5,6 +5,7 @@ import time
 import json
 import yaml
 from pymongo import MongoClient
+import boto3
 
 app = Flask(__name__)
 client = MongoClient('mongodb://localhost:27017/')
@@ -27,6 +28,9 @@ JENKINS_API_TOKEN = config.get('JENKINS_API_TOKEN')
 CLIENT_ID = config.get('CLIENT_ID')
 CLIENT_SECRET = config.get('CLIENT_SECRET')
 REDIRECT_URI =  config.get('REDIRECT_URI')
+AWS_ACCESS_KEY_ID = config.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = config.get('AWS_SECRET_ACCESS_KEY')
+
 
 @app.route('/login',methods=['GET', 'POST'])
 def login():
@@ -419,6 +423,10 @@ def deployment():
         data = request.json
         port = data.get('port')
         reponame = data.get('reponame')
+        ec2_pricing = fetch_ec2_pricing()
+        beanstalk_pricing = fetch_beanstalk_pricing()
+        eks_pricing = fetch_eks_pricing()
+
         result = trigger_jenkins_pipeline_deployment(port,reponame)
         if result == "SUCCESS":
            return jsonify({'Message': result}), 200
@@ -496,6 +504,59 @@ def get_sonarqube_report_url():
 
     print("Reached maximum number of retries. Unable to fetch SonarQube report URL.")
     return None
+
+def fetch_ec2_pricing(region='ap-south-1'):
+    try:
+       
+        ec2 = boto3.client('pricing', region_name=region,aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+        response = ec2.get_products(
+            ServiceCode='AmazonEC2',
+            Filters=[
+                {'Type': 'TERM_MATCH', 'Field': 'operatingSystem', 'Value': 'Linux'},
+                {'Type': 'TERM_MATCH', 'Field': 'tenancy', 'Value': 'Shared'},
+            ]
+        )
+        return response['PriceList']
+    except Exception as ex:
+        print(f"An error occurred while fetching EC2 pricing: {ex}")
+        return None
+
+def fetch_beanstalk_pricing(region='ap-south-1'):
+    try:
+        beanstalk = boto3.client('pricing', region_name=region,aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+        response = beanstalk.get_products(
+            ServiceCode='AWSElasticBeanstalk',
+            Filters=[
+                {'Type': 'TERM_MATCH', 'Field': 'termType', 'Value': 'OnDemand'},
+                {'Type': 'TERM_MATCH', 'Field': 'location', 'Value': region},
+            ]
+        )
+        return response['PriceList']
+    except Exception as ex:
+        print(f"An error occurred while fetching Beanstalk pricing: {ex}")
+        return None
+
+def fetch_eks_pricing(region='ap-south-1'):
+    try:
+        eks = boto3.client('pricing', region_name=region,aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+        response = eks.get_products(
+            ServiceCode='AmazonEKS',
+            Filters=[
+                {'Type': 'TERM_MATCH', 'Field': 'instanceType', 'Value': 'm5.large'},
+                {'Type': 'TERM_MATCH', 'Field': 'location', 'Value': region},
+            ]
+        )
+        return response['PriceList']
+    except Exception as ex:
+        print(f"An error occurred while fetching EKS pricing: {ex}")
+        return None
+
+
+@app.route('/pricing')
+def get_pricing():
+    ec2_pricing = fetch_ec2_pricing()
+    beanstalk_pricing = fetch_beanstalk_pricing()
+    eks_pricing = fetch_eks_pricing()
 
 if __name__ == '__main__':
     app.run(debug=True,port=5001)

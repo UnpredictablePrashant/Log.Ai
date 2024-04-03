@@ -14,7 +14,7 @@
     />
     <style>
       body {
-        background-image: url("/static/images/devops-services.jpg");
+        /* background-image: url("/static/images/devops-services.jpg"); */
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
@@ -64,7 +64,6 @@
     </style>
   </head>
   <body>
-    <div class="loader" id="loader" style="display: none"></div>
     <div class="navigation">
       <ul>
         <li><a href="/">Home</a></li>
@@ -72,25 +71,30 @@
         <li><a href="configuration">Configuration</a></li>
       </ul>
     </div>
-    <div class="form-container">
-      <h1>Configuration</h1>
-      <label for="gitUrl">Select Git URL:</label>
-      <div class="dropdown">
-        <button
-          class="btn btn-secondary dropdown-toggle"
-          type="button"
-          id="gitUrlDropdown"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          Select Git URL
-        </button>
-        <ul
-          class="dropdown-menu"
-          aria-labelledby="gitUrlDropdown"
-          id="dropdownMenu"
-        >
-          <!-- <li
+    <div class="container">
+      <div class="form-container">
+        <div id="loader-wrapper" class="loader-wrapper">
+          <div class="loader"></div>
+          <div class="loading-message">Please wait...</div>
+        </div>
+        <h1>Configuration</h1>
+        <label for="gitUrl">Select Git URL:</label>
+        <div class="dropdown">
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            id="gitUrlDropdown"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Select Git URL
+          </button>
+          <ul
+            class="dropdown-menu"
+            aria-labelledby="gitUrlDropdown"
+            id="dropdownMenu"
+          >
+            <!-- <li
             class="dropdown-item"
             onclick="setGitUrl('https://github.com/example1')"
           >
@@ -102,53 +106,53 @@
           >
             Example 2
           </li> -->
-          <!-- Add more dropdown items as needed -->
-        </ul>
-      </div>
-      <div id="selectedRepoDetails" style="display: none">
-        <h2>Selected Repository Details</h2>
-        <p><strong>Name:</strong> <span id="repoName"></span></p>
-        <p><strong>Clone URL:</strong> <span id="repoCloneUrl"></span></p>
-        <p><strong>Language:</strong> <span id="repoLanguage"></span></p>
-        <p><strong>Private:</strong> <span id="repoPrivate"></span></p>
-        <h2>Branches</h2>
-        <label for="branches">Select Branches:</label>
-        <div class="dropdown">
-          <button
-            class="btn btn-secondary dropdown-toggle"
-            type="button"
-            id="branchesDropdown"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            Select Branches
-          </button>
-          <ul
-            class="dropdown-menu"
-            aria-labelledby="branchesDropdown"
-            id="branchesdropdownMenu"
-          ></ul>
+            <!-- Add more dropdown items as needed -->
+          </ul>
         </div>
+        <div id="selectedRepoDetails" style="display: none">
+          <h2>Selected Repository Details</h2>
+          <p><strong>Name:</strong> <span id="repoName"></span></p>
+          <p><strong>Clone URL:</strong> <span id="repoCloneUrl"></span></p>
+          <p><strong>Language:</strong> <span id="repoLanguage"></span></p>
+          <p><strong>Private:</strong> <span id="repoPrivate"></span></p>
+          <h2>Branches</h2>
+          <label for="branches">Select Branches:</label>
+          <div class="dropdown">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              id="branchesDropdown"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Select Branches
+            </button>
+            <ul
+              class="dropdown-menu"
+              aria-labelledby="branchesDropdown"
+              id="branchesdropdownMenu"
+            ></ul>
+          </div>
+        </div>
+        <div id="selectedBranchDetails" style="display: none">
+          <h2>Selected Branch Details</h2>
+          <p><strong>Name:</strong> <span id="branchName"></span></p>
+        </div>
+        <br /><br />
+        <button class="btn btn-outline-secondary" onclick="submitGitUrl()">
+          Submit
+        </button>
+        <p id="message1"></p>
+        <button
+          class="btn-next"
+          id="nextButton"
+          style="display: none"
+          onclick="nextPage(2)"
+        >
+          Next
+        </button>
       </div>
-      <div id="selectedBranchDetails" style="display: none">
-        <h2>Selected Branch Details</h2>
-        <p><strong>Name:</strong> <span id="branchName"></span></p>
-      </div>
-      <br /><br />
-      <button class="btn btn-outline-secondary" onclick="submitGitUrl()">
-        Submit
-      </button>
-      <p id="message1"></p>
-      <button
-        class="btn-next"
-        id="nextButton"
-        style="display: none"
-        onclick="nextPage(2)"
-      >
-        Next
-      </button>
     </div>
-
     <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
       <div
         id="toasterSuccess"

@@ -14,7 +14,7 @@
     />
     <style>
       body {
-        background-image: url("/static/images/devops-services.jpg");
+        /* background-image: url("/static/images/devops-services.jpg"); */
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
@@ -94,9 +94,14 @@
         <li><a href="stack">Stack</a></li>
       </ul>
     </div>
-    <div class="form-container">
-      <h1>Stack</h1>
-      <!-- <div class="repository-contents" id="repositoryContents"></div>
+    <div class="container">
+      <div class="form-container">
+        <div id="loader-wrapper" class="loader-wrapper" style="display: none">
+          <div class="loader"></div>
+          <div class="loading-message">Please wait...</div>
+        </div>
+        <h1>Stack</h1>
+        <!-- <div class="repository-contents" id="repositoryContents"></div>
       <button id="backButton" style="display: none" onclick="goBack()">
         Back
       </button>
@@ -107,19 +112,20 @@
       >
         Select File
       </button> -->
-      <label for="stack">Select Stack:</label>
-      <select id="stack" name="stack">
-        <option value="MERN">MERN</option>
-        <option value="Python">Python</option></select
-      ><br /><br />
-      <label for="port">Port:</label>
-      <input type="text" id="port" name="port" /><br /><br />
-      <input type="submit" value="Submit" onclick="apicall()" />
+        <label for="stack">Select Stack:</label>
+        <select id="stack" name="stack">
+          <option value="MERN">MERN</option>
+          <option value="Python">Python</option></select
+        ><br /><br />
+        <label for="port">Port:</label>
+        <input type="text" id="port" name="port" /><br /><br />
+        <input type="submit" value="Submit" onclick="apicall()" />
 
-      <p id="message2"></p>
-      <button id="nextButton" style="display: none" onclick="nextPage(3)">
-        Next
-      </button>
+        <p id="message2"></p>
+        <button id="nextButton" style="display: none" onclick="nextPage(3)">
+          Next
+        </button>
+      </div>
     </div>
     <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
       <div
